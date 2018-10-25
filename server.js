@@ -1,7 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
-let http = require('http').Server(app);
+let http = require('http').Server(app); // creates Node HTTP server and shares with Express
 let io = require('socket.io')(http);
 
 app.use(express.static(__dirname))
@@ -18,14 +18,13 @@ app.get('/messages', (req, res) => {
 })
 
 app.post('/messages', (req, res) => {
-  // console.log("req.body: ", req.body);
   messages.push(req.body)
   io.emit('message', req.body)
   res.sendStatus(200)
 })
 
 io.on('connection', (socket) => {
-    console.log('user connected');
+    console.log('a user connected', socket.connected);
 })
 
 let server = http.listen(3000, () => {
